@@ -1,4 +1,4 @@
-package user.model;
+package bankingapp.model;
 import java.sql.Date;
 
 public class Member {
