@@ -38,7 +38,8 @@ public class MenuController {
                     // new TransactionController(scanner, conn, member).start();
                     break;
                 case "3":
-                    // new MyPageController(scanner, conn, member).start();
+                    boolean continueMenu = new MyPageController(scanner, conn, member).start();
+                    if (!continueMenu) return; // 탈퇴 시 바로 로그아웃
                     break;
                 case "4":
                     System.out.println("로그아웃합니다.");
