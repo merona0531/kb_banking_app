@@ -2,20 +2,35 @@ package bankingapp.dao;
 
 import bankingapp.model.Member;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MemberDAO {
 
-    private Connection conn;
+    private final Connection conn;
 
     public MemberDAO(Connection conn) {
         this.conn = conn;
     }
 
-    // 회원 추가
+    // ✅ 사용 가능한 가장 작은 user_id(1~999)를 찾는 메서드 추가
+    public long findNextAvailableUserId() throws SQLException {
+        String sql = "SELECT user_id FROM member WHERE user_id <= 999 ORDER BY user_id";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            long expected = 1;
+            while (rs.next()) {
+                long actual = rs.getLong("user_id");
+                if (actual != expected) {
+                    return expected;
+                }
+                expected++;
+            }
+            return expected <= 999 ? expected : -1;
+        }
+    }
+
+    // ✅ 회원가입 - user_id를 지정해서 삽입
     public void insertMember(Member member) throws SQLException {
-        String sql = "INSERT INTO 회원(user_id, name, resident_id, address, phone, email, password, birth_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO member(user_id, name, resident_id, address, phone, email, password, birth_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, member.getUserId());
             pstmt.setString(2, member.getName());
@@ -29,11 +44,12 @@ public class MemberDAO {
         }
     }
 
-    // 회원 조회 (user_id 기준)
-    public Member getMemberById(long userId) throws SQLException {
-        String sql = "SELECT * FROM 회원 WHERE user_id = ?";
+    // 로그인 - 이메일 + 비밀번호로 회원 조회
+    public Member findByEmailAndPassword(String email, String password) throws SQLException {
+        String sql = "SELECT * FROM member WHERE email = ? AND password = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, userId);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Member(
@@ -52,9 +68,9 @@ public class MemberDAO {
         return null;
     }
 
-    // 회원 정보 수정
+    // 마이페이지 - 회원 정보 수정
     public void updateMember(Member member) throws SQLException {
-        String sql = "UPDATE 회원 SET name=?, resident_id=?, address=?, phone=?, email=?, password=?, birth_date=? WHERE user_id=?";
+        String sql = "UPDATE member SET name=?, resident_id=?, address=?, phone=?, email=?, password=?, birth_date=? WHERE user_id=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, member.getName());
             pstmt.setString(2, member.getResidentId());
@@ -68,34 +84,12 @@ public class MemberDAO {
         }
     }
 
-    // 회원 삭제
+    // 마이페이지 - 회원 삭제
     public void deleteMember(long userId) throws SQLException {
-        String sql = "DELETE FROM 회원 WHERE user_id=?";
+        String sql = "DELETE FROM member WHERE user_id=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, userId);
             pstmt.executeUpdate();
         }
-    }
-
-    // 전체 회원 조회 (옵션)
-    public List<Member> getAllMembers() throws SQLException {
-        List<Member> list = new ArrayList<>();
-        String sql = "SELECT * FROM 회원";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while(rs.next()) {
-                list.add(new Member(
-                        rs.getLong("user_id"),
-                        rs.getString("name"),
-                        rs.getString("resident_id"),
-                        rs.getString("address"),
-                        rs.getString("phone"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getDate("birth_date")
-                ));
-            }
-        }
-        return list;
     }
 }
