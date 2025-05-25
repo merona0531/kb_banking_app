@@ -10,5 +10,6 @@ public interface ProductDAO {
     void deleteProduct(long productId);
     ProductVO getProduct(long productId);
     List<ProductVO> getAllProducts();
+    void deleteAllProducts();
 }
 
