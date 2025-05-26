@@ -1,4 +1,4 @@
-package bankingapp.vo;
+package bankingapp.domain;
 
 import java.sql.Timestamp;
 

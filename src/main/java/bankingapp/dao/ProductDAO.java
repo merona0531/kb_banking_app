@@ -1,6 +1,6 @@
 package bankingapp.dao;
 
-import bankingapp.vo.ProductVO;
+import bankingapp.domain.ProductVO;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package bankingapp.dao; // 패키지 이름 확인
 
-import bankingapp.vo.ProductVO; // VO 클래스 import
+import bankingapp.domain.ProductVO; // VO 클래스 import
 
 import java.sql.*; // JDBC 관련 클래스들을 위한 import
 import java.util.ArrayList; // ArrayList 클래스 import
