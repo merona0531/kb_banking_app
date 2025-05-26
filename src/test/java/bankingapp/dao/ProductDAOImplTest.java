@@ -1,4 +1,4 @@
-package bankingapp.test; // 패키지 이름 확인
+package bankingapp.dao; // 패키지 이름 확인
 
 import bankingapp.vo.ProductVO; // ProductVO 클래스 import
 import bankingapp.dao.ProductDAO; // ProductDAO 인터페이스 import
