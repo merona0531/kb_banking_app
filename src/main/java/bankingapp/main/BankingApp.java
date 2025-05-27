@@ -3,23 +3,23 @@ import bankingapp.controller.AuthController;
 import bankingapp.dao.ProductDAO;
 import bankingapp.dao.ProductDAOImpl;
 import bankingapp.view.ProductView;
-
 import java.util.Scanner;
+
 public class BankingApp {
+    private Scanner scanner;
     private AuthController authController;
 
     private ProductDAO productDAO;
     private ProductView productView;
-    private Scanner scanner;
 
     public BankingApp() {
         // 데이터베이스 연결 및 DAO 초기화
         // ProductDAOImpl 생성자에서 연결이 이루어집니다.
+        this.scanner = new Scanner(System.in);
         this.authController = new AuthController(this.scanner);
         this.productDAO = new ProductDAOImpl();
         // UI 클래스 초기화 (DAO 객체를 전달하여 데이터 접근 가능하게 함)
         this.productView = new ProductView(productDAO);
-        this.scanner = new Scanner(System.in);
     }
 
     public void start() {
@@ -32,7 +32,6 @@ public class BankingApp {
             switch (choice) {
                 case 1:
                     authController.login();
-                    authController.register();
                     break;
                 case 2:
 
