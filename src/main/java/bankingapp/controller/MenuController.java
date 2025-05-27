@@ -36,8 +36,8 @@ public class MenuController {
             System.out.println("+++++++++++++++++++++++++++++++");
             System.out.println("1. 계좌 관리");
             System.out.println("2. 상품 관리");
-            System.out.println("3. 로그아웃");
-
+            System.out.println("3. 마이페이지");
+            System.out.println("4. 로그아웃");
             System.out.print("선택: ");
             String choice = scanner.nextLine();
 
@@ -48,11 +48,11 @@ public class MenuController {
                 case "2":
                     productView.showProductMenu(scanner);
                     break;
-//                case "4":
-//                    boolean continueMenu = new MyPageController(scanner, conn, member).start();
-//                    if (!continueMenu) return; // 탈퇴 시 바로 로그아웃
-//                    break;
                 case "3":
+                    boolean continueMenu = new MyPageController(scanner, conn, member).start();
+                    if (!continueMenu) return; // 탈퇴 시 바로 로그아웃
+                    break;
+                case "4":
                     System.out.println("로그아웃합니다.");
                     return;
                 default:
