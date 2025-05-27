@@ -82,7 +82,7 @@ public class AccountDaoImpl implements AccountDao {
             pstmt.setString(1, "해지");
             pstmt.setLong(2, id);
             int count = pstmt.executeUpdate();
-            if(count > 0) System.out.println("해지가 완료되었습니다.");
+            if(count > 0) System.out.println("해지가 완료되었습니다.\n");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +95,7 @@ public class AccountDaoImpl implements AccountDao {
             pstmt.setInt(1, price);
             pstmt.setLong(2, id);
             int count = pstmt.executeUpdate();
-            if(count > 0) System.out.println("입금/출금이 완료되었습니다.");
+            if(count > 0) System.out.println("입금/출금이 완료되었습니다.\n");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
