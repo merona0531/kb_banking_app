@@ -17,7 +17,7 @@ public class AuthController {
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/bank", "root", "0531");
+                "jdbc:mysql://127.0.0.1:3306/bank", "root", "1234");
     }
 
     public void login() {
