@@ -1,6 +1,6 @@
 package bankingapp.dao; // 패키지 이름 확인
 
-import bankingapp.domain.ProductVO; // ProductVO 클래스 import
+import bankingapp.model.ProductVO; // ProductVO 클래스 import
 
 import java.sql.Timestamp; // Timestamp 클래스 import
 import java.util.Date;     // 현재 시간을 얻기 위해 Date 클래스 활용 (java.util.Date)

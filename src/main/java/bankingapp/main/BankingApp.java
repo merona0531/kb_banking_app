@@ -1,5 +1,5 @@
 package bankingapp.main;
-import bankingapp.controller.AuthController;
+import bankingapp.view.AuthController;
 import bankingapp.dao.ProductDAO;
 import bankingapp.dao.ProductDAOImpl;
 import bankingapp.view.ProductView;

@@ -1,7 +1,8 @@
-package bankingapp.controller;
+package bankingapp.view;
 
 import bankingapp.model.Member;
 import bankingapp.dao.MemberDAO;
+import bankingapp.util.JDBCUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,11 +16,7 @@ public class AuthController {
         this.scanner = scanner;
     }
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/bank", "root", "1234");
-    }
-
+    private final Connection conn = JDBCUtil.getConnection();
     public void login() {
         try {
             MemberDAO dao = new MemberDAO();
@@ -42,7 +39,7 @@ public class AuthController {
     }
 
     public void register() {
-        try (Connection conn = getConnection()) {
+        try (conn) {
             MemberDAO dao = new MemberDAO();
             Member newMember = new Member();
 

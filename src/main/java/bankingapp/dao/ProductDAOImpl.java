@@ -1,14 +1,12 @@
 package bankingapp.dao; // 패키지 이름 확인
 
-import bankingapp.domain.ProductVO; // VO 클래스 import
+import bankingapp.model.ProductVO; // VO 클래스 import
 import bankingapp.util.JDBCUtil;
 
 import java.sql.*; // JDBC 관련 클래스들을 위한 import
 import java.util.ArrayList; // ArrayList 클래스 import
 import java.util.List; // List 인터페이스 import
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+
 // ---------------------------------------------
 
 public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이스 구현 확인

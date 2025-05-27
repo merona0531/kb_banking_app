@@ -1,4 +1,4 @@
-package bankingapp.domain;
+package bankingapp.model;
 
 import java.sql.Timestamp;
 

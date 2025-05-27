@@ -1,12 +1,10 @@
 package bankingapp.view;
 
 import bankingapp.controller.AccountController;
-import bankingapp.controller.MenuController;
 import bankingapp.dao.ProductDAOImpl;
 import bankingapp.model.AccountVo;
 import bankingapp.model.Member;
 
-import java.util.Random;
 import java.util.Scanner;
 
 public class AccountView {

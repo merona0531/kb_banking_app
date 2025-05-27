@@ -1,14 +1,11 @@
-package bankingapp.controller;
+package bankingapp.view;
 
 import bankingapp.dao.ProductDAO;
 import bankingapp.dao.ProductDAOImpl;
 import bankingapp.model.Member;
-import bankingapp.view.AccountView;
-import bankingapp.view.ProductView;
 import bankingapp.dao.AccountDao;
 import bankingapp.dao.AccountDaoImpl;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class MenuController {
@@ -49,7 +46,7 @@ public class MenuController {
                     productView.showProductMenu(scanner);
                     break;
                 case "3":
-                    boolean continueMenu = new MyPageController(scanner, conn, member).start();
+                    boolean continueMenu = new MyPageController(scanner, member).start();
                     if (!continueMenu) return; // 탈퇴 시 바로 로그아웃
                     break;
                 case "4":

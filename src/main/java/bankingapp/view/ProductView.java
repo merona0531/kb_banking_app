@@ -1,7 +1,7 @@
 package bankingapp.view;
 
 import bankingapp.dao.ProductDAO;
-import bankingapp.domain.ProductVO;
+import bankingapp.model.ProductVO;
 
 import java.util.List;
 import java.util.Scanner;

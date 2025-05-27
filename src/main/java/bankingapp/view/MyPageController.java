@@ -1,4 +1,4 @@
-package bankingapp.controller;
+package bankingapp.view;
 
 import bankingapp.dao.MemberDAO;
 import bankingapp.model.Member;
