@@ -9,12 +9,10 @@ import java.util.Scanner;
 
 public class MyPageController {
     private final Scanner scanner;
-    private final Connection conn;
     private final Member member;
 
-    public MyPageController(Scanner scanner, Connection conn, Member member) {
+    public MyPageController(Scanner scanner, Member member) {
         this.scanner = scanner;
-        this.conn = conn;
         this.member = member;
     }
 
@@ -60,7 +58,7 @@ public class MyPageController {
 
     private void updateProfile() {
         try {
-            MemberDAO dao = new MemberDAO(conn);
+            MemberDAO dao = new MemberDAO();
 
             System.out.print("새 이름 (" + member.getName() + "): ");
             String name = scanner.nextLine();
@@ -102,7 +100,7 @@ public class MyPageController {
         String confirm = scanner.nextLine();
         if (confirm.equalsIgnoreCase("yes")) {
             try {
-                MemberDAO dao = new MemberDAO(conn);
+                MemberDAO dao = new MemberDAO();
                 dao.deleteMember(member.getUserId());
                 System.out.println("회원 탈퇴가 완료되었습니다.");
                 return true;

@@ -1,6 +1,7 @@
 package bankingapp.view;
 
 import bankingapp.controller.AccountController;
+import bankingapp.controller.MenuController;
 import bankingapp.dao.ProductDAOImpl;
 import bankingapp.model.AccountVo;
 import bankingapp.model.Member;
@@ -45,6 +46,7 @@ public class AccountView {
                     termination();
                     break;
                 case 4:
+                    new MenuController(scanner, member).start();
                     break;
                 default:
                     System.out.println("다시 선택해주세요.");
@@ -57,25 +59,24 @@ public class AccountView {
     private void getAccount() {
         System.out.println("[계좌 정보 조회]");
 
-        String format = "| %-4s | %-15s | %-10s | %-10s | %-12s |\n";
+        String format = "| %-4s | %-15s | %-10s | %-10s | %-12s | %-4s |\n";
 
         // 테이블 헤더
         System.out.println("+------+-----------------+------------+------------+--------------+--------+");
-        System.out.printf(format, "번호", "계좌번호", "종류", "잔액", "개설일");
+        System.out.printf(format, "번호", "계좌번호", "종류", "잔액", "개설일", "상태");
         System.out.println("+------+-----------------+------------+------------+--------------+--------+");
 
+
         // 데이터 출력
-        int index = 1;
-        // 상품 정보 데이터 가져오기
-        // 카테고리 이름 가져오기
         for (AccountVo accountVo : controller.getAccountList(member)) {
             if(accountVo.getStatus().equals("해지")) continue;
             System.out.printf(format,
-                    index++,
+                    accountVo.getId(),
                     accountVo.getAccountNumber(),
                     accountVo.getProduct(),
                     accountVo.getBalance(),
-                    accountVo.getCreatedAt());
+                    accountVo.getCreatedAt(),
+                    accountVo.getStatus());
         }
 
         // 테이블 바닥선

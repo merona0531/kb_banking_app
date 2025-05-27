@@ -21,8 +21,8 @@ public class AuthController {
     }
 
     public void login() {
-        try (Connection conn = getConnection()) {
-            MemberDAO dao = new MemberDAO(conn);
+        try {
+            MemberDAO dao = new MemberDAO();
 
             System.out.print("이메일: ");
             String email = scanner.nextLine();
@@ -32,7 +32,7 @@ public class AuthController {
             Member member = dao.findByEmailAndPassword(email, password);
             if (member != null) {
                 System.out.println("로그인 성공! Welcome " + member.getName() + "님");
-                new MenuController(scanner, conn, member).start();
+                new MenuController(scanner, member).start();
             } else {
                 System.out.println("이메일 또는 비밀번호가 일치하지 않습니다.");
             }
@@ -43,7 +43,7 @@ public class AuthController {
 
     public void register() {
         try (Connection conn = getConnection()) {
-            MemberDAO dao = new MemberDAO(conn);
+            MemberDAO dao = new MemberDAO();
             Member newMember = new Member();
 
             // 👉 다음 사용 가능한 user_id 찾기 (1~999 중)
