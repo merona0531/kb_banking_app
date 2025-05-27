@@ -13,16 +13,14 @@ import java.util.Scanner;
 
 public class MenuController {
     private final Scanner scanner;
-    private final Connection conn;
     private final Member member;
     private ProductDAO productDAO;
     private ProductView productView;
     private AccountDao accountDao;
     private AccountView accountView;
 
-    public MenuController(Scanner scanner, Connection conn, Member member) {
+    public MenuController(Scanner scanner, Member member) {
         this.scanner = scanner;
-        this.conn = conn;
         this.member = member;
         this.productDAO = new ProductDAOImpl();
         // UI 클래스 초기화 (DAO 객체를 전달하여 데이터 접근 가능하게 함)
@@ -45,7 +43,7 @@ public class MenuController {
 
             switch (choice) {
                 case "1":
-
+                    new AccountView(member).display();
                     break;
                 case "2":
                     productView.showProductMenu(scanner);

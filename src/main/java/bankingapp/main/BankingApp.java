@@ -36,6 +36,9 @@ public class BankingApp {
                 case 2:
                     authController.login();
                     break;
+                case 3:
+                    productView.showProductMenu(scanner); // 상품 관리 메뉴로 이동
+                    break;
                 case 0:
                     System.out.println("### 뱅킹 앱 시스템 종료 ###");
                     return; // 애플리케이션 종료

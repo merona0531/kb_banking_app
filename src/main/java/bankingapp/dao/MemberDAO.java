@@ -1,15 +1,17 @@
 package bankingapp.dao;
 
 import bankingapp.model.Member;
+import bankingapp.util.JDBCUtil;
+
 import java.sql.*;
 
 public class MemberDAO {
 
-    private final Connection conn;
+    private final Connection conn = JDBCUtil.getConnection();
 
-    public MemberDAO(Connection conn) {
-        this.conn = conn;
-    }
+//    public MemberDAO(Connection conn) {
+//        this.conn = conn;
+//    }
 
     // ✅ 사용 가능한 가장 작은 user_id(1~999)를 찾는 메서드 추가
     public long findNextAvailableUserId() throws SQLException {

@@ -55,6 +55,34 @@ public class ProductView {
     }
     // ### 4-1. 상품 목록 조회 화면 ###
     public void listProducts(Scanner scanner) {
+        printListProducts();
+
+        // 상품 선택 또는 뒤로가기 옵션 제공
+        while (true) {
+            System.out.println("\n옵션: [상품 ID 입력] 상세 정보 조회 / [0] 뒤로가기");
+            System.out.print("입력: ");
+            String input = scanner.nextLine();
+
+            if (input.equals("0")) {
+                return; // 뒤로가기
+            }
+
+            try {
+                long productId = Long.parseLong(input);
+                // 해당 ID의 상품이 실제로 존재하는지 확인 후 상세 화면으로 이동
+                ProductVO selectedProduct = productDAO.getProduct(productId);
+                if (selectedProduct != null) {
+                    showProductDetail(scanner, selectedProduct); // 상품 상세 정보 화면으로 이동
+                } else {
+                    System.out.println("❗️ 해당 상품 ID를 가진 상품이 없습니다.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❗️ 올바른 상품 ID 또는 옵션을 입력해주세요.");
+            }
+        }
+    }
+
+    public void printListProducts() {
         System.out.println("\n--- 🛍️ 상품 목록 조회 ---");
 
         // TODO: 검색 및 필터 기능 구현 필요 (지금은 전체 목록만 출력)
@@ -79,30 +107,6 @@ public class ProductView {
                         product.getStatus());
             }
             System.out.println("-------------------------------------------------------------------------------------------------------------------");
-        }
-
-        // 상품 선택 또는 뒤로가기 옵션 제공
-        while (true) {
-            System.out.println("\n옵션: [상품 ID 입력] 상세 정보 조회 / [0] 뒤로가기");
-            System.out.print("입력: ");
-            String input = scanner.nextLine();
-
-            if (input.equals("0")) {
-                return; // 뒤로가기
-            }
-
-            try {
-                long productId = Long.parseLong(input);
-                // 해당 ID의 상품이 실제로 존재하는지 확인 후 상세 화면으로 이동
-                ProductVO selectedProduct = productDAO.getProduct(productId);
-                if (selectedProduct != null) {
-                    showProductDetail(scanner, selectedProduct); // 상품 상세 정보 화면으로 이동
-                } else {
-                    System.out.println("❗️ 해당 상품 ID를 가진 상품이 없습니다.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("❗️ 올바른 상품 ID 또는 옵션을 입력해주세요.");
-            }
         }
     }
 
