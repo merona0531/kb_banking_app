@@ -1,6 +1,6 @@
 package bankingapp.controller;
 
-import bankingapp.model.Account;
+import bankingapp.model.AccountVo;
 import bankingapp.model.Member;
 import bankingapp.service.AccountService;
 
@@ -14,7 +14,11 @@ public class AccountController {
         accountService.terminationAccount(id, member);
     }
 
-    public List<Account> getAccountList(Member member) {
+    public List<AccountVo> getAccountList(Member member) {
         return accountService.getAccountList(member);
+    }
+
+    public void createAccount(Member member, long product_id) {
+        accountService.createAccount(member, product_id);
     }
 }
