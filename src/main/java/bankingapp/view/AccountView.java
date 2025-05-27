@@ -1,6 +1,7 @@
 package bankingapp.view;
 
 import bankingapp.controller.AccountController;
+import bankingapp.dao.ProductDAOImpl;
 import bankingapp.model.AccountVo;
 import bankingapp.model.Member;
 
@@ -83,12 +84,14 @@ public class AccountView {
 
     // 신규 계좌 개설
     private void createAccount() {
-        // 상품 조회 필요
+        // 상품 조회 필요\
+        new ProductView(new ProductDAOImpl()).listProducts(scanner);
         // member, 상품, 0, date, 정상, 계좌 번호 생성
-        long product_id;
         System.out.println("원하는 상품을 선택해주세요.");
+        long product_id = scanner.nextInt();
+        scanner.nextLine();
 
-        // controller.createAccount(member, );
+        controller.createAccount(member, product_id);
         System.out.println("계좌 개설이 완료되었습니다.");
     }
 

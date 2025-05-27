@@ -12,6 +12,7 @@ import java.util.Random;
 public class AccountService {
 
     private AccountDao accountDao = new AccountDaoImpl();
+    private static long index = 1;
 
     // 계좌 해지
     public void terminationAccount(int id, Member member) {
@@ -25,11 +26,12 @@ public class AccountService {
 
     public void createAccount(Member member, long product_id) {
         accountDao.insert(AccountVo.builder()
-                .id(1L) // 아이디 랜덤 설정
+                .id(index++) // 아이디 랜덤 설정
                 .userId(member.getUserId())
                 .productId(product_id)
                 .balance(0)
                 .createdAt(LocalDate.now())
+                .status("정상")
                 .accountNumber(createAccountNumber())
                 .build());
     }

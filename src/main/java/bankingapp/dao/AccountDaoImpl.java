@@ -14,16 +14,16 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void insert(AccountVo accountVo) {
-        String sql = "insert into account values(?,?,?,?,?,?,?,?)";
+        String sql = "insert into account values(?,?,?,?,?,?,?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, accountVo.getId());
             pstmt.setLong(2, accountVo.getUserId());
             pstmt.setLong(3, accountVo.getProductId());
             //pstmt.setLong(4, account.getCategoryId());
-            pstmt.setInt(5, accountVo.getBalance());
-            pstmt.setDate(6, Date.valueOf(accountVo.getCreatedAt()));
-            pstmt.setString(7, accountVo.getStatus());
-            pstmt.setString(8, accountVo.getAccountNumber());
+            pstmt.setInt(4, accountVo.getBalance());
+            pstmt.setDate(5, Date.valueOf(accountVo.getCreatedAt()));
+            pstmt.setString(6, accountVo.getStatus());
+            pstmt.setString(7, accountVo.getAccountNumber());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -56,7 +56,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Optional<AccountVo> getAccount(long id) {
-        AccountVo accountVo;
+        AccountVo accountVo = null;
         //String sql = "select * from account where id = ?";
         String sql = "SELECT * FROM account " +
                 //"LEFT JOIN category ON category.category_id = account.category_id " +
@@ -65,7 +65,8 @@ public class AccountDaoImpl implements AccountDao {
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
-            accountVo = map(rs);
+            if(rs.next())
+                accountVo = map(rs);
             //account.setCategory(rs.getString("category_name"));
             accountVo.setProduct(rs.getString("product_name"));
         } catch (SQLException e) {
@@ -119,7 +120,7 @@ public class AccountDaoImpl implements AccountDao {
         String sql = "delete from account where id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, id);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +128,7 @@ public class AccountDaoImpl implements AccountDao {
 
     private AccountVo map(ResultSet rs) throws SQLException {
         return AccountVo.builder()
-                .id(rs.getLong("account_id"))
+                .id(rs.getLong("id"))
                 .userId(rs.getLong("user_id"))
                 .productId(rs.getLong("product_id"))
                 //.categoryId(rs.getLong("category_id"))
