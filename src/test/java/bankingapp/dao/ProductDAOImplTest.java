@@ -180,14 +180,14 @@ public class ProductDAOImplTest {
             e.printStackTrace();
             System.exit(1);
         } finally {
-            // --- 테스트 후 데이터베이스 연결 종료 ---
+            /*// --- 테스트 후 데이터베이스 연결 종료 ---
             System.out.println("[DEBUG-MAIN] 테스트 완료. 데이터베이스 연결 종료 시도...");
             if (productDAO instanceof ProductDAOImpl) {
-                ((ProductDAOImpl) productDAO).closeConnection(); // ProductDAOImpl의 연결 종료 메서드 호출
+                ((ProductDAOImpl) productDAO).close(); // ProductDAOImpl의 연결 종료 메서드 호출
             } else {
                 System.err.println("[ERROR-MAIN] DAO 객체가 ProductDAOImpl 인스턴스가 아니라 연결 종료 건너뜀.");
             }
-            System.out.println("[DEBUG-MAIN] 데이터베이스 연결 종료 시도 완료.");
+            System.out.println("[DEBUG-MAIN] 데이터베이스 연결 종료 시도 완료.");*/
         }
 
 

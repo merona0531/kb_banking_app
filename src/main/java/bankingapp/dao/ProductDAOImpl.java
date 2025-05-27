@@ -1,61 +1,19 @@
 package bankingapp.dao; // 패키지 이름 확인
 
 import bankingapp.domain.ProductVO; // VO 클래스 import
+import bankingapp.util.JDBCUtil;
 
 import java.sql.*; // JDBC 관련 클래스들을 위한 import
 import java.util.ArrayList; // ArrayList 클래스 import
 import java.util.List; // List 인터페이스 import
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+// ---------------------------------------------
 
 public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이스 구현 확인
-    private Connection connection;
-
     // 생성자: 데이터베이스 연결을 초기화합니다.
-    public ProductDAOImpl() {
-        // 데이터베이스 연결 설정에 필요한 정보 (세연님 실제 정보로 입력)
-        String URL = "jdbc:mysql://localhost:3306/bank?serverTimezone=UTC&useSSL=false";
-        String USER = "root";
-        String PASSWORD = "1234";
-
-        System.out.println("[DEBUG-CONN] ProductDAOImpl 생성자 시작"); // 생성자 시작 로그
-
-        try {
-            // DriverManager를 통해 데이터베이스에 연결 시도
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-
-            System.out.println("[DEBUG-CONN] 데이터베이스에 성공적으로 연결되었습니다: " + URL); // 연결 성공 메시지 출력
-
-        } catch (SQLException e) {
-            // 연결 실패 시 예외 처리
-            System.err.println("[ERROR-CONN] 데이터베이스 연결 실패: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
-            System.err.println("Error Code: " + e.getErrorCode());
-            e.printStackTrace(); // 자세한 오류 정보 출력
-            // 연결 실패 시 심각한 문제이므로 예외를 던져 프로그램 중단
-            throw new RuntimeException("데이터베이스 연결 초기화 실패", e);
-        } catch (Exception e) {
-            // 기타 예외 처리
-            System.err.println("[ERROR-CONN] 데이터베이스 연결 중 알 수 없는 오류 발생: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("데이터베이스 연결 초기화 중 알 수 없는 오류 발생", e);
-        }
-        System.out.println("[DEBUG-CONN] ProductDAOImpl 생성자 종료"); // 생성자 종료 로그
-    }
-
-    // 연결을 닫는 메서드 (자원 관리를 위해 필요 - 테스트 코드 마지막에 호출하면 좋음)
-    public void closeConnection() {
-        System.out.println("[DEBUG-CONN] 연결 종료 시도...");
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("[DEBUG-CONN] 데이터베이스 연결이 종료되었습니다.");
-            } else {
-                System.out.println("[DEBUG-CONN] 데이터베이스 연결이 이미 닫혀있거나 null입니다.");
-            }
-        } catch (SQLException e) {
-            System.err.println("[ERROR-CONN] 데이터베이스 연결 종료 실패: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    private final Connection conn = JDBCUtil.getConnection();
 
     // 테스트 데이터 삭제 메서드 (외래 키 제약 조건 검사 비활성화하여 강제 삭제)
     @Override
@@ -65,14 +23,14 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
         try {
             // 1. 외래 키 제약 조건 검사를 일시적으로 비활성화
             System.out.println("[DEBUG-DEL] 1/3. SET FOREIGN_KEY_CHECKS = 0; 시도...");
-            try (Statement stmt = connection.createStatement()) {
+            try (Statement stmt = conn.createStatement()) {
                 stmt.execute("SET FOREIGN_KEY_CHECKS = 0;");
                 System.out.println("[DEBUG-DEL] -> SET FOREIGN_KEY_CHECKS = 0; 완료.");
             }
 
             // 2. product 테이블의 모든 데이터 삭제
             System.out.println("[DEBUG-DEL] 2/3. DELETE FROM product; 시도...");
-            try (Statement stmt = connection.createStatement()) { // 새로운 Statement 객체 사용
+            try (Statement stmt = conn.createStatement()) { // 새로운 Statement 객체 사용
                 String deleteSql = "DELETE FROM product";
                 int rowsAffected = stmt.executeUpdate(deleteSql);
                 System.out.println("[DEBUG-DEL] -> product 테이블에서 " + rowsAffected + "개 행 삭제 완료.");
@@ -80,7 +38,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
 
             // 3. 외래 키 제약 조건 검사를 다시 활성화
             System.out.println("[DEBUG-DEL] 3/3. SET FOREIGN_KEY_CHECKS = 1; 시도...");
-            try (Statement stmt = connection.createStatement()) { // 새로운 Statement 객체 사용
+            try (Statement stmt = conn.createStatement()) { // 새로운 Statement 객체 사용
                 stmt.execute("SET FOREIGN_KEY_CHECKS = 1;");
                 System.out.println("[DEBUG-DEL] -> SET FOREIGN_KEY_CHECKS = 1; 완료.");
             }
@@ -110,7 +68,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
     public void insertProduct(ProductVO product) {
         String sql = "INSERT INTO product (product_id, product_name, product_type, interest_rate, min_deposit, term, description, created_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         System.out.println("[DEBUG-INSERT] insertProduct 시도 (ID: " + product.getProductId() + ")");
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, product.getProductId());
             pstmt.setString(2, product.getProductName());
             pstmt.setString(3, product.getProductType());
@@ -136,7 +94,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
     public void updateProduct(ProductVO product) {
         String sql = "UPDATE product SET product_name = ?, product_type = ?, interest_rate = ?, min_deposit = ?, term = ?, description = ?, created_at = ?, status = ? WHERE product_id = ?";
         System.out.println("[DEBUG-UPDATE] updateProduct 시도 (ID: " + product.getProductId() + ")");
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, product.getProductName());
             pstmt.setString(2, product.getProductType());
             pstmt.setDouble(3, product.getInterestRate());
@@ -161,7 +119,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
     public void deleteProduct(long productId) {
         String sql = "DELETE FROM product WHERE product_id = ?";
         System.out.println("[DEBUG-DELETE] deleteProduct 시도 (ID: " + productId + ")");
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, productId);
 
             int rowsAffected = pstmt.executeUpdate();
@@ -179,7 +137,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
         String sql = "SELECT * FROM product WHERE product_id = ?";
         System.out.println("[DEBUG-GET] getProduct 시도 (ID: " + productId + ")");
         ProductVO product = null;
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, productId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -210,7 +168,7 @@ public class ProductDAOImpl implements ProductDAO { // ProductDAO 인터페이�
         String sql = "SELECT * FROM product";
         System.out.println("[DEBUG-GETALL] getAllProducts 시도");
         List<ProductVO> productList = new ArrayList<>();
-        try (Statement stmt = connection.createStatement();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 ProductVO product = new ProductVO(

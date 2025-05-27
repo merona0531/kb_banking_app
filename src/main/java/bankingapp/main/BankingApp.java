@@ -31,10 +31,10 @@ public class BankingApp {
 
             switch (choice) {
                 case 1:
-                    authController.login();
+                    authController.register();
                     break;
                 case 2:
-
+                    authController.login();
                 case 3:
                     productView.showProductMenu(scanner); // 상품 관리 메뉴로 이동
                     break;
@@ -49,10 +49,9 @@ public class BankingApp {
 
     private void printMainMenu() {
         System.out.println("\n--- 메인 메뉴 ---");
-        System.out.println("1. 🔐 로그인 및 회원가입 화면");
-        System.out.println("2. 💳 계좌 관리");
-        System.out.println("3. 🛍️ 상품 관리");
-        System.out.println("0. ❌ 종료");
+        System.out.println("1. 회원가입 화면");
+        System.out.println("2. 로그인 화면");
+        System.out.println("0. 종료");
         System.out.print("메뉴 선택: ");
     }
 
@@ -71,10 +70,10 @@ public class BankingApp {
         BankingApp app = new BankingApp();
         app.start();
 
-        // 애플리케이션 종료 시 데이터베이스 연결 닫기
+        /*// 애플리케이션 종료 시 데이터베이스 연결 닫기
         if (app.productDAO instanceof ProductDAOImpl) {
             ((ProductDAOImpl) app.productDAO).closeConnection();
-        }
+        }*/
     }
 }
 
